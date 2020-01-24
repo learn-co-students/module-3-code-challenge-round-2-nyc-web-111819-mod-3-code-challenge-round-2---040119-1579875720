@@ -7,105 +7,82 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(beers => {
             console.log(beers)
-            beers.forEach(function (beer) {
+            beers.forEach(function(beer){
                 renderBeer(beer)
             })
 
 
-            function renderBeer(beer) {
+            function renderBeer(beer){
                 let beerUl = document.getElementById("list-group")
                 beerUl.innerHTML = `
         <ul class="list-group">
         </ul>
            `
                 beers.forEach(beer => {
-
                     let li = document.createElement('li')
-                    // console.log(beer)
-                    li.className = "beer-name"
+                    li.className = "list-group-item"
+                    li.dataset.id = beer.id
                     li.innerText = beer.name
                     beerUl.appendChild(li)
-
                 })
             }
-
-
            
         })
+
+
     
-    // let beerUl = document.getElementById("list-group")
-    document.addEventListener('click', function (e) {
-        if (e.target.className === "beer-name") {
-            console.log("clicked")
-            // let beerId = e.target.id 
-            // let beerName = e.target.name.value
-            // let beerTagline = e.target.tagline.value
-            // let beerBrew = e.target.first_brewed.value
-            // let beerDescription = e.target.description.value
-            // let beerImage = e.target.image_url.value
-            // let beerPairing = e.target.food_pairing.value
-            // let beerTips = e.target.brewers_tips.value
-            // let beerContributor = e.target.contributed_by.value
-            let beerDetailDiv = document.getElementById("beer-detail")
-            beerDetailDiv.innerHTML = `
-                <h1>${e.target.name}</h1>
-                <img src${e.target.image_url}>
-                <h3>${e.target.tagline}</h3>
-                <textarea>${e.target.tagline}</textarea>
-                <button id="edit-beer" class="btn btn-info">
+    function renderBeerDetails(beer) {
+        let beerDetailDiv = document.getElementById("beer-detail")
+        beerDetailDiv.innerHTML = `
+                <h1>${beer.name}</h1>
+                <img src =${beer.image_url}>
+                <h3>${beer.tagline}</h3>
+                <textarea id= "textarea">${beer.description}</textarea>
+                <button data-beerid="${beer.id}"id="edit-beer-${beer.id}" class="btn btn-info">
                 Save
                 </button>
-
             `
-            fetch(`${beerIdURL}/${beer.id}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json"
-                },
-                 body: JSON.stringify({ beerDetailDiv
-                    //  beerId,
-                //     beerName,
-                //     beerTagline,
-                //     beerBrew,
-                //     beerDescription,
-                //     beerImage,
-                //     beerPairing,
-                //     beerTips,
-                //     beerContributor
-                 }),
-            })
+
+    } 
+
+    let beerUl = document.getElementById("list-group")
+    beerUl.addEventListener('click', function (e) {
+        if (e.target.className === "list-group-item") {
+            console.log(e.target.dataset.id)
+            fetch(`${beersIndexURL}/${e.target.dataset.id}`)
+                 .then(resp => resp.json())
+                 .then(beer => {
+                     console.log(beer)
+                     renderBeerDetails(beer)})
+            
         }
     })
-
-    // This eventListener and PATCH is unfinished because I ran out of time!
+    
+    
+    
     document.addEventListener('click', function(e){
-        if (e.target.id === "edit-beer") {
+        let beerDetailDiv = document.getElementById("beer-detail")
+        let beerDescription = document.getElementById("textarea")
 
-            fetch(`${beerIdURL}/${beer.id}`, {
+        console.log(e.target)
+        if (e.target.className === "btn btn-info") {
+            fetch(`http://localhost:3000/beers/${e.target.dataset.beerid}`, {
                 method: "PATCH",
                 headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json"
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify({beerDetailDiv})
-                    
-            
+                body: JSON.stringify({
+                    description: beerDescription.value
+                })
             })
-                    
         }
     })
 
 
-
-
-
-
-
-
-
-
-
-
+    
 
 })
+
+
+
