@@ -32,7 +32,7 @@ beerUl.addEventListener('click', (event) => {
 
 function createBeerDiv(beer){
   let beerDiv = document.createElement('div')
-  // first attempt route using innerHTML
+  // first attempt using innerHTML to create beerDiv
   // beerDiv.id = beer.id
   // beerDiv.innerHTML = `
   //   <h1>${beer.name}</h1>
@@ -66,7 +66,7 @@ function createBeerDiv(beer){
 }
 
 beerDetailDiv.addEventListener('click', (event) => {
-  //first attempt route using innerHTML
+  //first attempt using innerHTML to create beerDiv
 
   // if (event.target.className === "btn btn-info"){
     //   console.log('clicked button!')
@@ -82,7 +82,8 @@ beerDetailDiv.addEventListener('click', (event) => {
         //     body: JSON.stringify({description: newDescription})
         //   })
         // }
-        
+
+  
   if (event.target.className === "btn btn-info"){
     console.log('clicked button!')
     console.log(event.target.parentNode.childNodes[3].value)
@@ -97,6 +98,5 @@ beerDetailDiv.addEventListener('click', (event) => {
         body: JSON.stringify({description: newDescription})
       })
   }
-
 })
 })//end of dom content event listener
